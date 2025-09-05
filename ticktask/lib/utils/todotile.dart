@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class todoTile extends StatelessWidget {
   final String taskName;
   final bool flag;
-  Function(bool?)? onChanged; //
+  Function(bool?)? onChanged;
 
   todoTile({
     super.key,
@@ -15,14 +15,25 @@ class todoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(25.0),
+      padding: EdgeInsets.only(left: 25, right: 25, top: 25),
       child: Container(
         child: Padding(
           padding: EdgeInsets.all(25.0),
           child: Row(
             children: [
-              Checkbox(value: flag, onChanged: onChanged),
-              Text(taskName),
+              Checkbox(
+                value: flag,
+                onChanged: onChanged,
+                activeColor: Colors.black,
+              ),
+              Text(
+                taskName,
+                style: TextStyle(
+                  decoration: flag
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
             ],
           ),
         ),

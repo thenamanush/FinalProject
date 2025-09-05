@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ticktask/utils/dialog_box.dart';
 import 'package:ticktask/utils/todotile.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,10 +17,22 @@ class _HomePageState extends State<HomePage> {
     ['play game', false],
   ];
 
+  // mark completed tasks
   void checkboxChanged(bool? val, int ind) {
     setState(() {
       todoList[ind][1] = !todoList[ind][1];
     });
+  }
+
+  // create new task
+  void createNewTask() {
+    //
+    showDialog(
+      context: context,
+      builder: (context) {
+        return dialogBox();
+      },
+    );
   }
 
   @override
@@ -40,6 +53,13 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Colors.cyan,
         elevation: 0,
+      ),
+
+      // add task
+      floatingActionButton: FloatingActionButton(
+        onPressed: createNewTask,
+        backgroundColor: Colors.yellowAccent,
+        child: const Icon(Icons.add, color: Colors.black),
       ),
 
       // todo tiles
