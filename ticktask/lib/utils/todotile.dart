@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class todoList extends StatelessWidget {
+class todoTile extends StatelessWidget {
   final String taskName;
   final bool flag;
-  Function(bool?)? onChanged;
+  Function(bool?)? onChanged; //
 
-  todoList({
+  todoTile({
     super.key,
     required this.taskName,
     required this.flag,

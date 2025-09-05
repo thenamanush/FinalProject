@@ -4,11 +4,24 @@ import 'package:ticktask/utils/todotile.dart';
 class HomePage extends StatefulWidget {
   HomePage({super.key});
 
-  @override
+  @override // jello
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  // to do list
+  List todoList = [
+    ['make app', false],
+    ['do work', true],
+    ['play game', false],
+  ];
+
+  void checkboxChanged(bool? val, int ind) {
+    setState(() {
+      todoList[ind][1] = !todoList[ind][1];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +43,15 @@ class _HomePageState extends State<HomePage> {
       ),
 
       // todo tiles
-      body: ListView(
-        children: [
-          todoList(taskName: 'Make App', flag: true, onChanged: (p0) {}),
-          todoList(taskName: 'push to github', flag: false, onChanged: (p0) {}),
-        ],
+      body: ListView.builder(
+        itemCount: todoList.length,
+        itemBuilder: (context, index) {
+          return todoTile(
+            taskName: todoList[index][0],
+            flag: todoList[index][1],
+            onChanged: (value) => checkboxChanged(value, index),
+          );
+        },
       ),
     );
   }
