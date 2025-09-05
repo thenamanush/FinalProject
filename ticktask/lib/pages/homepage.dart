@@ -10,6 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //text controller
+  final _controller = TextEditingController();
+
   // to do list
   List todoList = [
     ['make app', false],
@@ -24,13 +27,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // save new task
+  void saveTask() {
+    setState(() {
+      todoList.add([_controller.text, false]);
+      _controller.clear();
+    });
+    Navigator.of(context).pop();
+  }
+
+  // delete a task
+  void deleteTask(int index) {
+    setState(() {
+      todoList.removeAt(index);
+    });
+  }
+
   // create new task
   void createNewTask() {
     //
     showDialog(
       context: context,
       builder: (context) {
-        return dialogBox();
+        return dialogBox(
+          controller: _controller,
+          onSave: saveTask,
+          onDelete: Navigator.of(context).pop,
+        );
       },
     );
   }
@@ -70,6 +93,7 @@ class _HomePageState extends State<HomePage> {
             taskName: todoList[index][0],
             flag: todoList[index][1],
             onChanged: (value) => checkboxChanged(value, index),
+            deleteFunc: (context) => deleteTask(index),
           );
         },
       ),
