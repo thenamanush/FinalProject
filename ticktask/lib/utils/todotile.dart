@@ -6,6 +6,7 @@ class todoTile extends StatelessWidget {
   final bool flag;
   Function(bool?)? onChanged;
   Function(BuildContext)? deleteFunc;
+  Function(BuildContext)? editFunc;
 
   todoTile({
     super.key,
@@ -13,15 +14,16 @@ class todoTile extends StatelessWidget {
     required this.flag,
     required this.onChanged,
     required this.deleteFunc,
+    this.editFunc,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 25, right: 25, top: 25),
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
       child: Slidable(
         endActionPane: ActionPane(
-          motion: StretchMotion(),
+          motion: const StretchMotion(),
           children: [
             SlidableAction(
               onPressed: deleteFunc,
@@ -31,31 +33,34 @@ class todoTile extends StatelessWidget {
             ),
           ],
         ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue[200],
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(25.0),
-            child: Row(
-              children: [
-                Checkbox(
-                  value: flag,
-                  onChanged: onChanged,
-                  activeColor: Colors.black,
-                ),
-                Text(
-                  taskName,
-                  style: TextStyle(
-                    decoration: flag
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+        child: GestureDetector(
+          onTap: () => editFunc?.call(context),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: flag,
+                    onChanged: onChanged,
+                    activeColor: Colors.black,
                   ),
-                ),
-              ],
+                  Text(
+                    taskName,
+                    style: TextStyle(
+                      decoration: flag
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

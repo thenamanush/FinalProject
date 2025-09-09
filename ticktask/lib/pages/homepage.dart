@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //text controller
+  // text controller
   final _controller = TextEditingController();
 
   // to do list
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
 
   // create new task
   void createNewTask() {
-    //
+    _controller.clear();
     showDialog(
       context: context,
       builder: (context) {
@@ -58,10 +58,30 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // edit task
+  void editTask(int index) {
+    _controller.text = todoList[index][0]; // prefill with old task
+    showDialog(
+      context: context,
+      builder: (context) {
+        return dialogBox(
+          controller: _controller,
+          onSave: () {
+            setState(() {
+              todoList[index][0] = _controller.text;
+              _controller.clear();
+            });
+            Navigator.of(context).pop();
+          },
+          onDelete: Navigator.of(context).pop,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // background color
       backgroundColor: Colors.white,
 
       // app bar
@@ -78,14 +98,14 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
       ),
 
-      // add task
+      // add task button
       floatingActionButton: FloatingActionButton(
         onPressed: createNewTask,
         backgroundColor: Colors.blue,
         child: const Icon(Icons.add, color: Colors.black),
       ),
 
-      // todo tiles
+      // list of tasks
       body: ListView.builder(
         itemCount: todoList.length,
         itemBuilder: (context, index) {
@@ -94,6 +114,7 @@ class _HomePageState extends State<HomePage> {
             flag: todoList[index][1],
             onChanged: (value) => checkboxChanged(value, index),
             deleteFunc: (context) => deleteTask(index),
+            editFunc: (context) => editTask(index), // ✅ tap to edit
           );
         },
       ),

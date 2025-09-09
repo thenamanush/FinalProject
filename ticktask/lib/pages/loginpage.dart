@@ -19,8 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   void logIn() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
+    final email = _emailController.text;
+    final password = _passwordController.text;
 
     try {
       await authService.signinWithPassword(email, password);
