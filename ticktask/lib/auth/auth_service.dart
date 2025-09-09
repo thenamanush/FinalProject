@@ -12,7 +12,7 @@ class AuthService {
   }
 
   // sign up with email and passwod
-  Future<AuthResponse> singupWithEmailPassword(
+  Future<AuthResponse> signupWithEmailPassword(
     String email,
     String password,
   ) async {

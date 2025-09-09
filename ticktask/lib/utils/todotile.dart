@@ -33,7 +33,7 @@ class todoTile extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.yellowAccent,
+            color: Colors.blue[200],
             borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
@@ -52,6 +52,7 @@ class todoTile extends StatelessWidget {
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
                     fontSize: 20,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],

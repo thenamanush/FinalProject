@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:ticktask/auth/authgate.dart';
 import 'package:ticktask/pages/homepage.dart';
+import 'package:ticktask/pages/loginpage.dart';
+import 'package:ticktask/pages/signuppage.dart';
 
 void main() async {
   // intialize the supabase
@@ -20,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: SignUpPage(),
       theme: ThemeData(primarySwatch: Colors.cyan),
     );
   }

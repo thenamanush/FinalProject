@@ -74,14 +74,14 @@ class _HomePageState extends State<HomePage> {
             fontSize: 24,
           ),
         ),
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.tealAccent[700],
         elevation: 0,
       ),
 
       // add task
       floatingActionButton: FloatingActionButton(
         onPressed: createNewTask,
-        backgroundColor: Colors.yellowAccent,
+        backgroundColor: Colors.blue,
         child: const Icon(Icons.add, color: Colors.black),
       ),
 

@@ -1,36 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:ticktask/auth/auth_service.dart';
 import 'package:ticktask/pages/homepage.dart';
-import 'package:ticktask/pages/signuppage.dart';
+import 'package:ticktask/pages/loginpage.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  // get authservice
+class _SignUpPageState extends State<SignUpPage> {
   final authService = AuthService();
 
   // text editing controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  void logIn() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
+  void signUp() async {
+    // datas
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
 
-    try {
-      await authService.signinWithPassword(email, password);
-
+    // check if passwords match
+    if (password != confirmPassword) {
       if (mounted) {
-        Navigator.pushReplacement(
+        ScaffoldMessenger.of(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
+        ).showSnackBar(const SnackBar(content: Text("Passwords don't match")));
       }
+      return;
+    }
+
+    // attempt to sing up
+    try {
+      await authService.signupWithEmailPassword(email, password);
+      // pop the page
+      Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -95,11 +103,23 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 25),
 
+                    TextField(
+                      controller: _confirmPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: "Confirm Password",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+
                     SizedBox(
                       width: 200,
                       height: 45,
                       child: ElevatedButton(
-                        onPressed: logIn,
+                        onPressed: signUp,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepPurpleAccent,
                           shape: RoundedRectangleBorder(
@@ -107,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         child: Text(
-                          "Sign In",
+                          "Register",
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),
@@ -118,18 +138,18 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Don’t have an account? "),
+                        Text("Already have an account? "),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SignUpPage(),
+                                builder: (context) => LoginPage(),
                               ),
                             );
                           },
                           child: Text(
-                            "Sign Up",
+                            "Log In",
                             style: TextStyle(
                               color: Colors.deepPurpleAccent,
                               fontWeight: FontWeight.bold,
