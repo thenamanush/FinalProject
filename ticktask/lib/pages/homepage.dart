@@ -5,7 +5,7 @@ import 'package:ticktask/utils/todotile.dart';
 class HomePage extends StatefulWidget {
   HomePage({super.key});
 
-  @override // jello
+  @override
   State<HomePage> createState() => _HomePageState();
 }
 
