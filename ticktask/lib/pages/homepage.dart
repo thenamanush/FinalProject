@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ticktask/db/tasksDatabase.dart';
+import 'package:ticktask/pages/profile_pge.dart';
 import 'package:ticktask/utils/dialog_box.dart';
 import 'package:ticktask/utils/todotile.dart';
 
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     fetchTasks();
   }
 
-  // ✅ Get tasks from Supabase
+  // Get tasks from Supabase
   Future<void> fetchTasks() async {
     final tasks = await db.getTasks();
     setState(() {
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // ✅ Save new task
+  // Save new task
   Future<void> saveTask() async {
     if (_controller.text.trim().isEmpty) return;
 
@@ -40,13 +41,13 @@ class _HomePageState extends State<HomePage> {
     fetchTasks();
   }
 
-  // ✅ Delete task
+  // Delete task
   Future<void> deleteTask(int id) async {
     await db.deleteTask(id);
     fetchTasks();
   }
 
-  // ✅ Edit task
+  // Edit task
   Future<void> editTask(int id, String currentTitle) async {
     _controller.text = currentTitle;
     showDialog(
@@ -66,13 +67,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // ✅ Mark complete/incomplete
+  // Mark complete/incomplete
   Future<void> toggleComplete(int id, bool isDone, String title) async {
     await db.updateTask(id, title, !isDone);
     fetchTasks();
   }
 
-  // ✅ Create new task dialog
+  // Create new task dialog
   void createNewTask() {
     _controller.clear();
     showDialog(
@@ -93,6 +94,15 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.person, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+          },
+        ),
         title: const Text(
           'To Do',
           style: TextStyle(

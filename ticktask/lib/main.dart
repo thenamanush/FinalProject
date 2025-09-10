@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:ticktask/auth/authgate.dart';
 import 'package:ticktask/pages/homepage.dart';
 import 'package:ticktask/pages/loginpage.dart';
 import 'package:ticktask/pages/signuppage.dart';

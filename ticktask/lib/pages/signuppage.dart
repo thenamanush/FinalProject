@@ -75,7 +75,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: Colors.deepPurpleAccent,
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(height: 20),
@@ -121,7 +121,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: ElevatedButton(
                         onPressed: signUp,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurpleAccent,
+                          backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -151,7 +151,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: Text(
                             "Log In",
                             style: TextStyle(
-                              color: Colors.deepPurpleAccent,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
