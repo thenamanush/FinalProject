@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
             fontSize: 24,
           ),
         ),
-        backgroundColor: Colors.tealAccent[700],
+        backgroundColor: Colors.blue,
         elevation: 0,
       ),
 
