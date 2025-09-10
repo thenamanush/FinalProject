@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ticktask/db/tasksDatabase.dart';
 import 'package:ticktask/utils/dialog_box.dart';
 import 'package:ticktask/utils/todotile.dart';
 
@@ -10,40 +11,68 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // text controller
   final _controller = TextEditingController();
+  final db = TasksDatabase();
 
-  // to do list
-  List todoList = [
-    ['make app', false],
-    ['do work', true],
-    ['play game', false],
-  ];
+  List<Map<String, dynamic>> todoList = [];
 
-  // mark completed tasks
-  void checkboxChanged(bool? val, int ind) {
+  @override
+  void initState() {
+    super.initState();
+    fetchTasks();
+  }
+
+  // ✅ Get tasks from Supabase
+  Future<void> fetchTasks() async {
+    final tasks = await db.getTasks();
     setState(() {
-      todoList[ind][1] = !todoList[ind][1];
+      todoList = tasks;
     });
   }
 
-  // save new task
-  void saveTask() {
-    setState(() {
-      todoList.add([_controller.text, false]);
-      _controller.clear();
-    });
+  // ✅ Save new task
+  Future<void> saveTask() async {
+    if (_controller.text.trim().isEmpty) return;
+
+    await db.addTask(_controller.text.trim(), false);
+    _controller.clear();
     Navigator.of(context).pop();
+    fetchTasks();
   }
 
-  // delete a task
-  void deleteTask(int index) {
-    setState(() {
-      todoList.removeAt(index);
-    });
+  // ✅ Delete task
+  Future<void> deleteTask(int id) async {
+    await db.deleteTask(id);
+    fetchTasks();
   }
 
-  // create new task
+  // ✅ Edit task
+  Future<void> editTask(int id, String currentTitle) async {
+    _controller.text = currentTitle;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return dialogBox(
+          controller: _controller,
+          onSave: () async {
+            await db.updateTask(id, _controller.text.trim(), false);
+            _controller.clear();
+            Navigator.of(context).pop();
+            fetchTasks();
+          },
+          onDelete: () => Navigator.of(context).pop(),
+        );
+      },
+    );
+  }
+
+  // ✅ Mark complete/incomplete
+  Future<void> toggleComplete(int id, bool isDone, String title) async {
+    await db.updateTask(id, title, !isDone);
+    fetchTasks();
+  }
+
+  // ✅ Create new task dialog
   void createNewTask() {
     _controller.clear();
     showDialog(
@@ -58,33 +87,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // edit task
-  void editTask(int index) {
-    _controller.text = todoList[index][0]; // prefill with old task
-    showDialog(
-      context: context,
-      builder: (context) {
-        return dialogBox(
-          controller: _controller,
-          onSave: () {
-            setState(() {
-              todoList[index][0] = _controller.text;
-              _controller.clear();
-            });
-            Navigator.of(context).pop();
-          },
-          onDelete: Navigator.of(context).pop,
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      // app bar
       appBar: AppBar(
         title: const Text(
           'To Do',
@@ -98,26 +105,28 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
       ),
 
-      // add task button
       floatingActionButton: FloatingActionButton(
         onPressed: createNewTask,
         backgroundColor: Colors.blue,
         child: const Icon(Icons.add, color: Colors.black),
       ),
 
-      // list of tasks
-      body: ListView.builder(
-        itemCount: todoList.length,
-        itemBuilder: (context, index) {
-          return todoTile(
-            taskName: todoList[index][0],
-            flag: todoList[index][1],
-            onChanged: (value) => checkboxChanged(value, index),
-            deleteFunc: (context) => deleteTask(index),
-            editFunc: (context) => editTask(index), // ✅ tap to edit
-          );
-        },
-      ),
+      body: todoList.isEmpty
+          ? const Center(child: Text("No tasks yet"))
+          : ListView.builder(
+              itemCount: todoList.length,
+              itemBuilder: (context, index) {
+                final task = todoList[index];
+                return todoTile(
+                  taskName: task['content'],
+                  flag: task['flag'],
+                  onChanged: (value) =>
+                      toggleComplete(task['id'], task['flag'], task['content']),
+                  deleteFunc: (context) => deleteTask(task['id']),
+                  editFunc: (context) => editTask(task['id'], task['content']),
+                );
+              },
+            ),
     );
   }
 }
